@@ -1,6 +1,6 @@
 {
   "name": "multichainsdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "this module will handle the calls to multichain ",
   "main": "index.js",
   "dependencies": {
@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/dhananjay-primechain/multichainsdk/issues"
   },
-  "homepage": "https://github.com/dhananjay-primechain/multichainsdk#readme"
+  "homepage": "https://github.com/dhananjay-primechain/multichainsdk#readme",
+  "directories": {
+    "test": "test"
+  }
 }

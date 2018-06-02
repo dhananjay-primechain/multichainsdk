@@ -5,7 +5,7 @@
  **/
 'use strict';
 
-var creds = require('../config/multichain.json')
+var creds = require('../../config/multichain.json')
 // multichain module for nodejs
 let multichain = require("multichain-node")(creds.config);
 
