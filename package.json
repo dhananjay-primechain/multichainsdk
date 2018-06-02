@@ -1,34 +1,24 @@
 {
-  "requires": true,
-  "lockfileVersion": 1,
+  "name": "multichainsdk",
+  "version": "1.0.0",
+  "description": "this module will handle the calls to multichain ",
+  "main": "index.js",
   "dependencies": {
-    "bluebird": "^3.5.1",
-    "cors": "^2.8.4",
-    "express": "^4.16.3",
+    "mocha": "^5.2.0",
     "multichain-node": "^2.1.6-version1.0.2"
   },
-  "name": "multichainstream",
-  "description": "This node module is completly works for streams in multichain module",
-  "version": "1.0.4",
-  "main": "index.js",
   "devDependencies": {},
   "scripts": {
-    "test": "node index.js"
+    "test": "mocha --reporter spec"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dj-rapidqube/multichainmodule.git"
+    "url": "git+https://github.com/dhananjay-primechain/multichainsdk.git"
   },
-  "keywords": [
-    "addData",
-    "readData",
-    "readKey",
-    "deleteData"
-  ],
-  "author": "dhananjay <dhananjay.patil@rapidqube.com> (https://github.com/dj-rapidqube/multichainmodule)",
+  "author": "gokusan <dhananjay@primechain.com> (https://www.primechaintech.com)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/dj-rapidqube/multichainmodule/issues"
+    "url": "https://github.com/dhananjay-primechain/multichainsdk/issues"
   },
-  "homepage": "https://github.com/dj-rapidqube/multichainmodule#readme"
+  "homepage": "https://github.com/dhananjay-primechain/multichainsdk#readme"
 }
