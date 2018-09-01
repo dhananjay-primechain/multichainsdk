@@ -4,8 +4,10 @@ multichainsdk node moudule enable developers to reduce their developement time.
 This module will help to communicate with multichain.
 
 #Installing  
-npm i multichainsdk
-sudo git clone https://github.com/dhananjay-primechain/multichainsdk.git
+
+1.npm i multichainsdk
+
+2.sudo git clone https://github.com/dhananjay-primechain/multichainsdk.git
 
 example to use multichainsdk
 
