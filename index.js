@@ -24,7 +24,7 @@ var creds = require('../../config/multichain.js')
 let multichain = require("multichain-node")(creds);
 
 const async = require('async');
-// const crypto = require("crypto");
+
 //=============================== general methods for blockchain parameters ================================
 
 // function will provide blockchainm parameters.
@@ -36,7 +36,7 @@ function getBlockchainParams() {
       "with-upgrades": true
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             message: "your Blockchain parameters...!",
@@ -61,7 +61,7 @@ function getRuntimeParams() {
     var response;
     multichain.getRuntimeParams({},
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             message: "Blockchain runtime parameters",
@@ -116,7 +116,7 @@ function getInfo() {
 
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -142,7 +142,7 @@ function help() {
 
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -167,7 +167,7 @@ function stop() {
 
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -197,7 +197,7 @@ function addMultiSigAddress(params) {
       "keys": [keys]
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -289,7 +289,7 @@ function importAddress(params) {
       "rescan": true
     },
       (err, res) => {
-        console.log(res)
+
 
         if (err == null) {
           return resolve({
@@ -318,7 +318,7 @@ function listAddresses() {
       "start": 0
     },
       (err, res) => {
-        console.log(res)
+
 
         if (err == null) {
           return resolve({
@@ -347,7 +347,7 @@ function createKeyPairs(params) {
     },
       (err, res) => {
         if (err == null) {
-          console.log(res)
+
           return resolve({
             address: res[0].address,
             pubkey: res[0].pubkey,
@@ -378,7 +378,7 @@ function createMultiSig(params) {
     },
       (err, res) => {
         if (err == null) {
-          console.log(res)
+
           return resolve({
             address: res.address,
             redeemScript: res.redeemScript,
@@ -404,7 +404,7 @@ function validateAddress(params) {
     },
       (err, res) => {
         if (err == null) {
-          console.log(res)
+
 
           return resolve({
             "address": res.address,
@@ -437,7 +437,7 @@ function grant(params) {
     },
       (err, res) => {
         if (err == null) {
-          console.log(res)
+
           return resolve({
             response: res,
             message: "your address has been granted permissions....!"
@@ -467,7 +467,7 @@ function grantFrom(params) {
     },
       (err, res) => {
         if (err == null) {
-          console.log(res)
+
           return resolve({
             response: res,
             message: "your address has been granted permissions....!"
@@ -501,7 +501,7 @@ function grantWithData(params) {
     },
       (err, res) => {
         if (err == null) {
-          console.log(res)
+
           return resolve({
             response: res,
             message: "your address has been granted permissions....!"
@@ -536,7 +536,7 @@ function grantWithMetadata(params) {
     },
       (err, res) => {
         if (err == null) {
-          console.log(res)
+
           return resolve({
             response: res,
             message: "your address has been granted permissions....!"
@@ -572,7 +572,7 @@ function grantWithDatafrom(params) {
     },
       (err, res) => {
         if (err == null) {
-          console.log(res)
+
           return resolve({
             response: res,
             message: "your address has been granted permissions....!"
@@ -608,7 +608,7 @@ function grantWithMetadataFrom(params) {
     },
       (err, res) => {
         if (err == null) {
-          console.log(res)
+
           return resolve({
             response: res,
             message: "your address has been granted permissions....!"
@@ -635,7 +635,7 @@ function listPermissions() {
     },
       (err, res) => {
         if (err == null) {
-          console.log(res)
+
           return resolve({
             response: res,
             message: "your address has been granted permissions....!"
@@ -663,7 +663,7 @@ function revoke(params) {
     },
       (err, res) => {
         if (err == null) {
-          console.log(res)
+
           return resolve({
             response: res,
             message: "your address has been granted permissions....!"
@@ -695,7 +695,7 @@ function revokeFrom(params) {
     },
       (err, res) => {
         if (err == null) {
-          console.log(res)
+
           return resolve({
             response: res,
             message: "your address has been granted permissions....!"
@@ -827,7 +827,7 @@ function issueMoreFrom(params) {
       "qty": quantity
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -857,7 +857,7 @@ function listAssets() {
     },
       (err, res) => {
         if (err == null) {
-          // console.log(res)
+          //
           return resolve({
             message: "your asset lists...!",
             response: res
@@ -884,7 +884,7 @@ function listAssetsbyName(params) {
     },
       (err, res) => {
         if (err == null) {
-          // console.log(res)
+          //
           async.retry({
             times: 6,
             interval: 5 * 1000
@@ -938,7 +938,7 @@ function getAddressBalances(params) {
       // "includeLocked": true
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
 
 
@@ -969,7 +969,7 @@ function getAddressTransaction(params) {
       "verbose": true
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -998,7 +998,7 @@ function getMultiBalances(params) {
       "includeLocked": false
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
 
           return resolve({
@@ -1055,7 +1055,7 @@ function getTotalBalance() {
       "includeLocked": false
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1083,7 +1083,7 @@ function getTotalBalances() {
       "includeLocked": false
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           let tokenDetails = {
             name: res[0].name,
@@ -1114,7 +1114,7 @@ function getWalletTransaction(params) {
       "verbose": false
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1140,7 +1140,7 @@ function listAddressTransactions(params) {
       "verbose": false
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1168,7 +1168,7 @@ function listWalletTransactions(params) {
       "verbose": false
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1197,7 +1197,7 @@ function send(params) {
       "amount": 1
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1224,7 +1224,7 @@ function sendToAddress(params) {
       "amount": amounts
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1254,7 +1254,7 @@ function sendAsset(params) {
       // "native-amount": 0
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1285,7 +1285,7 @@ function sendAssetToAddress(params) {
       // "native-amount": 0
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1318,7 +1318,7 @@ function sendAssetFrom(params) {
       "native-amount": 0
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1347,7 +1347,7 @@ function sendFrom(params) {
       "amount": amount,
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1376,7 +1376,7 @@ function sendwithData(params) {
       "data": data
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1405,7 +1405,7 @@ function sendWithMetadata(params) {
       "data": data
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1434,7 +1434,7 @@ function sendwithDataFrom(params) {
       "data": data
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1465,7 +1465,7 @@ function sendWithMetadataFrom(params) {
       "data": data
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1494,7 +1494,7 @@ function sendFromAddress(params) {
       "amount": amount
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1526,7 +1526,7 @@ function appendRawExchange(params) {
       "assets": assetName
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1563,7 +1563,7 @@ function completeRawExchange(params) {
       "data": hexdata
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1593,7 +1593,7 @@ function createRawExchange(params) {
       "assets": assetName
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1619,7 +1619,7 @@ function decodeRawExchange(params) {
       "verbose": false
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1644,7 +1644,7 @@ function disableRawTransaction(params) {
       "hexstring": hexstring
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1670,7 +1670,7 @@ function prepareLockUnspent(params) {
       "lock": true
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1698,7 +1698,7 @@ function prepareLockUnspentFrom(params) {
       "lock": true
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1731,7 +1731,7 @@ function create(params) {
       }
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1765,7 +1765,7 @@ function createFrom(params) {
       }
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1795,7 +1795,7 @@ function listStreams() {
       "start": 0
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1899,7 +1899,7 @@ function publishFrom(params) {
       data: hexstring
     }, (err, res, key, data) => {
       if (err == null) {
-        console.log(res)
+
         return resolve({
           response: res,
           key: key,
@@ -1928,7 +1928,7 @@ function subscribe(params) {
       "rescan": true
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1955,7 +1955,7 @@ function unsubscribe(params) {
       "stream": streamName
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -1986,7 +1986,7 @@ function getAssetTransaction(params) {
       "verbose": false
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -2016,7 +2016,7 @@ function listAssetTransactions(params) {
       "local-ordering": false
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -2047,7 +2047,7 @@ function getStreamItem(params) {
       "verbose": false
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -2077,7 +2077,7 @@ function getTxOutData(params) {
       "vout": vout
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -2112,7 +2112,7 @@ function listStreamBlockItems(params) {
 
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -2212,7 +2212,7 @@ function listStreamKeyItemsStream(params) {
             response: null
           });
         } else {
-          console.log(res)
+
           var string = '';
           for (let i = 0; i < res.length; i++) {
             var data = res[i].data;
@@ -2266,7 +2266,7 @@ function listStreamKeys(params) {
       "count": lastCount,
       "start": startCount
     }, (err, res) => {
-      console.log(res)
+
       if (err == null) {
 
         for (let i = 0; i < res.length; i++) {
@@ -2309,7 +2309,7 @@ function listStreamItems(params) {
       "verbose": false,
       "local-ordering": false
     }, (err, res) => {
-      console.log(res)
+
       var length = res.length;
 
       if (err == null) {
@@ -2481,7 +2481,7 @@ function combineUnspent(params) {
       "maxtime": 30
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -2507,7 +2507,7 @@ function listLockUnspent() {
 
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -2537,7 +2537,7 @@ function listUnspent(params) {
       "receivers": []
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -2569,7 +2569,7 @@ function lockUnspent(params) {
       }]
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -2607,7 +2607,7 @@ function appendRawChange(params) {
       "qty": quantity,
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -2639,7 +2639,7 @@ function appendRawData(params) {
       "data": hexstring
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -2671,7 +2671,7 @@ function appendRawMetadata(params) {
       "data": hexstring
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -2709,7 +2709,7 @@ function appendRawTransaction(params) {
       "action": action
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -2745,7 +2745,7 @@ function createRawTransaction(params) {
       "action": actions
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -2778,7 +2778,7 @@ function createRawSendFrom(params) {
       "action": actions
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -2805,7 +2805,7 @@ function decodeRawTransaction(params) {
       "hexstring": hexstring
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -2833,7 +2833,7 @@ function sendRawTransaction(params) {
       "hexstring": hexstring
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -2864,7 +2864,7 @@ function signRawTransaction(params) {
       "sighashtype": null
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -2898,7 +2898,7 @@ function addNode(params) {
       "command": commands
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -2924,7 +2924,7 @@ function getAddedNodeinfo() {
       "verbose": false
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -2948,7 +2948,7 @@ function getNetworkInfo() {
     var response;
     multichain.getNetworkInfo({},
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -2974,7 +2974,7 @@ function getPeerInfo() {
 
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3000,7 +3000,7 @@ function ping() {
 
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3062,7 +3062,7 @@ function verifyMessage(params) {
       "message": messages
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3092,7 +3092,7 @@ function getBlock(params) {
       "format": true
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3119,7 +3119,7 @@ function getBlockchainInfo() {
 
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3146,7 +3146,7 @@ function getBlockHash(params) {
       "height": blockHeight
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3197,7 +3197,7 @@ function getRawMempool() {
 
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3225,7 +3225,7 @@ function getRawTransaction(params) {
       "verbose": 0
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3255,7 +3255,7 @@ function getTxOut(params) {
       "unconfirmed": false
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3283,7 +3283,7 @@ function listBlocks(params) {
       "verbose": false
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3312,7 +3312,7 @@ function backupWallet(params) {
       "filename": filenames
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3339,7 +3339,7 @@ function dumpPrivKey(params) {
       "address": addresses
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3366,7 +3366,7 @@ function dumpWallet(params) {
       "hash": blockHash,
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3393,7 +3393,7 @@ function encryptWallet(params) {
       "passphrase": passphrases
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3415,7 +3415,7 @@ function getWalletInfo() {
 
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3445,7 +3445,7 @@ function importPrivKey(params) {
       "rescan": true
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3472,7 +3472,7 @@ function importWallet(params) {
       "filename": filenames
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3498,7 +3498,7 @@ function walletLock(params) {
 
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3527,7 +3527,7 @@ function walletPassphrase(params) {
       "timeout": timeout
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3556,7 +3556,7 @@ function walletPassphraseChange(params) {
       "new-passphrase": newPassphrases
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3590,7 +3590,7 @@ function approveFrom(params) {
       "approve": approve
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3616,7 +3616,7 @@ function listUpgrades() {
       "upgrades": "*"
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3642,7 +3642,7 @@ function clearMempool() {
     var response;
     multichain.clearMempool({},
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3669,7 +3669,7 @@ function pause(params) {
       "tasks": task
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3697,7 +3697,7 @@ function resume(params) {
       "tasks": task
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3725,7 +3725,7 @@ function setLastBlock(params) {
       "hash": hash
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
@@ -3754,7 +3754,7 @@ function getMiningInfo() {
 
     },
       (err, res) => {
-        console.log(res)
+
         if (err == null) {
           return resolve({
             response: res,
