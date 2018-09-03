@@ -3772,6 +3772,74 @@ function getMiningInfo() {
   })
 }
 
+// ==================================== encrypt file =========================================
+
+function encryptiv(params) {
+
+  return new Promise((resolve, reject) => {
+    var response;
+    let text = params.text;
+    let password = params.key;
+    let iv = params.iv;
+
+    var cipher = crypto.createCipheriv('aes-256-gcm', password, iv);
+    var encrypted = cipher.update(text, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+    var tag = cipher.getAuthTag();
+    var enctyptedData = {
+      content: encrypted,
+      tag: Buffer.from(tag).toString('hex')
+    };
+
+    if (enctyptedData) {
+      return resolve({
+        response: enctyptedData
+      });
+    }
+    else {
+      return reject({
+        status: 500,
+        message: 'Internal Server Error !'
+      });
+
+    }
+  })
+}
+
+// ================================= decrypt file =============================================
+
+function decryptiv(params) {
+
+  return new Promise((resolve, reject) => {
+    var response;
+    let encrypted = params.text;
+    let password = params.key;
+    let iv = params.iv;
+
+    var decipher = crypto.createDecipheriv('aes-256-gcm', password, iv);
+    decipher.setAuthTag(Buffer.from(encrypted.tag, 'hex'));
+    var decrypted = decipher.update(encrypted.content, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+
+    let decrypted_data_json = JSON.parse(decrypted);
+    let file_data = Buffer.from(decrypted_data_json["data"], 'hex');
+
+    if (file_data) {
+      return resolve({
+        response: file_data,
+        decrypted_data_json: decrypted_data_json
+      });
+    }
+    else {
+      return reject({
+        status: 500,
+        message: 'Internal Server Error !'
+      });
+
+    }
+  })
+}
+
 module.exports = {
   //general
   getBlockchainParams: getBlockchainParams,
@@ -3917,5 +3985,9 @@ module.exports = {
   setLastBlock: setLastBlock,
   //mining
   getMiningInfo: getMiningInfo,
-
+  // encrypt file
+  encryptiv: encryptiv,
+  // decrypt file
+  decryptiv: decryptiv
 }
+
