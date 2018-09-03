@@ -24,7 +24,7 @@ var creds = require('../../config/multichain.js')
 let multichain = require("multichain-node")(creds);
 
 const async = require('async');
-
+const crypto = require("crypto");
 //=============================== general methods for blockchain parameters ================================
 
 // function will provide blockchainm parameters.
@@ -3793,7 +3793,8 @@ function encryptiv(params) {
 
     if (enctyptedData) {
       return resolve({
-        response: enctyptedData
+        response: enctyptedData,
+        //message: "Blockchain Information"
       });
     }
     else {
@@ -3806,7 +3807,7 @@ function encryptiv(params) {
   })
 }
 
-// ================================= decrypt file =============================================
+// ==================================== decrypt file =========================================
 
 function decryptiv(params) {
 
@@ -3827,7 +3828,9 @@ function decryptiv(params) {
     if (file_data) {
       return resolve({
         response: file_data,
-        decrypted_data_json: decrypted_data_json
+        decrypted_data_json: decrypted_data_json,
+
+        //message: "Blockchain Information"
       });
     }
     else {
@@ -3985,6 +3988,7 @@ module.exports = {
   setLastBlock: setLastBlock,
   //mining
   getMiningInfo: getMiningInfo,
+
   // encrypt file
   encryptiv: encryptiv,
   // decrypt file
