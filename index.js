@@ -22,9 +22,9 @@ limitations under the License.
 var creds = require('../../config/multichain.js')
 // multichain module for nodejs
 let multichain = require("multichain-node")(creds);
-
 const async = require('async');
 const crypto = require("crypto");
+const algorithm = 'aes-256-gcm';
 //=============================== general methods for blockchain parameters ================================
 
 // function will provide blockchainm parameters.
@@ -44,10 +44,10 @@ function getBlockchainParams() {
 
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -69,10 +69,10 @@ function getRuntimeParams() {
 
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -97,10 +97,10 @@ function setRunTimeparam(params) {
             response: "runtimeParameters has been changed",
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -123,10 +123,10 @@ function getInfo() {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -149,10 +149,10 @@ function help() {
             message: "help at your desk...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -174,10 +174,10 @@ function stop() {
             message: "your Blockchain node has been stopped....!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -194,20 +194,20 @@ function addMultiSigAddress(params) {
     var keys = params.keys;
     multichain.addMultiSigAddress({
       "nrequired": number,
-      "keys": [keys]
+      "keys": keys
     },
       (err, res) => {
 
         if (err == null) {
           return resolve({
             response: res,
-            message: "your Blockchain node has been stopped....!"
+            message: "multisignature address has been generated...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -224,22 +224,17 @@ function getAddresses(params) {
       "verbose": verbose
     },
       (err, res) => {
+        console.log("BC RES", res);
+
         if (err == null) {
-          for (let i = 0; i < res.length; i++) {
-            address.push({
-              "address": res[i]
-            })
-          }
-          console.log(address)
           return resolve({
-            response: address,
-            message: "your Blockchain contains this addresses....!"
+            response: res,
+            message: "your Blockchain addresses fetched....!"
           });
         } else {
-          console.log(err)
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -252,13 +247,14 @@ function getNewAddress() {
     var response;
     var address = [];
     multichain.getNewAddress({
-
+      verbose: true
     },
       (err, res) => {
+
         address.push({
           "address": res
         })
-        console.log(address)
+
 
         if (err == null) {
           return resolve({
@@ -267,10 +263,10 @@ function getNewAddress() {
 
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -286,7 +282,7 @@ function importAddress(params) {
     multichain.importAddress({
       "address": addresses,
       "label": lable,
-      "rescan": true
+      "rescan": true,
     },
       (err, res) => {
 
@@ -297,10 +293,10 @@ function importAddress(params) {
             message: "your address has been imported to Blockchain node....!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -323,13 +319,13 @@ function listAddresses() {
         if (err == null) {
           return resolve({
             response: res,
-            message: "your Blockchain node contais this addresses....!"
+            message: "Blockchain node addresses fetched....!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -352,13 +348,13 @@ function createKeyPairs(params) {
             address: res[0].address,
             pubkey: res[0].pubkey,
             privkey: res[0].privkey,
-            message: "your Blockchain node has been stopped....!"
+            message: "your key pair is generated-....!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -371,7 +367,6 @@ function createMultiSig(params) {
     var response;
     var nrequired = params.nrequired;
     var keyArray = params.keys;
-    console.log(keyArray)
     multichain.createMultiSig({
       "nrequired": nrequired,
       "keys": keyArray
@@ -382,12 +377,13 @@ function createMultiSig(params) {
           return resolve({
             address: res.address,
             redeemScript: res.redeemScript,
+            message: "your multisignature key pair is generated-....!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -400,23 +396,21 @@ function validateAddress(params) {
     var response;
     var addresses = params.address;
     multichain.validateAddress({
-      "address": addresses
+      "address": addresses,
+      "verbose": true
     },
       (err, res) => {
         if (err == null) {
 
-
           return resolve({
-            "address": res.address,
-            "is_valid": res.isvalid,
-            "is_mine": res.ismine,
-            message: "your Blockchain node has been stopped....!"
+            response: res,
+            message: "Blockchain address is valid....!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -443,10 +437,10 @@ function grant(params) {
             message: "your address has been granted permissions....!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -473,10 +467,10 @@ function grantFrom(params) {
             message: "your address has been granted permissions....!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -507,10 +501,10 @@ function grantWithData(params) {
             message: "your address has been granted permissions....!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
 
         }
@@ -542,10 +536,10 @@ function grantWithMetadata(params) {
             message: "your address has been granted permissions....!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -578,10 +572,10 @@ function grantWithDatafrom(params) {
             message: "your address has been granted permissions....!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -614,10 +608,10 @@ function grantWithMetadataFrom(params) {
             message: "your address has been granted permissions....!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -625,26 +619,27 @@ function grantWithMetadataFrom(params) {
   })
 }
 
-function listPermissions() {
+function listPermissions(params) {
   return new Promise((resolve, reject) => {
     var response;
+    var address = params.address;
     multichain.listPermissions({
       "permissions": "all",
-      "addresses": "*",
-      "verbose": false
+      "addresses": address,
+      "verbose": true
     },
       (err, res) => {
         if (err == null) {
 
           return resolve({
             response: res,
-            message: "your address has been granted permissions....!"
+            message: "your address has this list of permissions....!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -666,13 +661,13 @@ function revoke(params) {
 
           return resolve({
             response: res,
-            message: "your address has been granted permissions....!"
+            message: "permissions revoked from your address....!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -698,13 +693,13 @@ function revokeFrom(params) {
 
           return resolve({
             response: res,
-            message: "your address has been granted permissions....!"
+            message: "permissions revoked from your address....!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -712,6 +707,35 @@ function revokeFrom(params) {
   })
 }
 
+function verifyPermission(params) {
+  return new Promise((resolve, reject) => {
+    var response;
+    var address = params.addresses;
+    var permission = params.permissions;
+
+    multichain.verifyPermission({
+      "addresses": address,
+      "permissions": permission
+
+    },
+      (err, res) => {
+        if (err == null) {
+
+          return resolve({
+            response: res,
+            message: "permissions verified for your address....!"
+          });
+        } else {
+
+          return reject({
+            status: 500,
+            message: err.message
+          });
+        }
+      }
+    )
+  })
+}
 // ====================================== asset permission methods ===============================================
 
 
@@ -721,14 +745,18 @@ function issue(params) {
     var response;
     var address = params.address;
     var assetName = params.asset;
-    var quantity = params.quantity;
-    // var units = params.amount;
+    var quantity = parseInt(params.qty);
+    var units = parseInt(params.unit);
+    var details = params.details;
 
     multichain.issue({
       address: address,
       asset: { "name": assetName.name, "open": assetName.open },
       qty: quantity,
-      units: 0.01
+      units: units,
+      details: {
+        details
+      }
     },
       (err, res) => {
         if (err == null) {
@@ -737,10 +765,10 @@ function issue(params) {
             message: "your asset has been created"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -754,7 +782,8 @@ function issueFrom(params) {
     var toAddress = params.to;
     var assetName = params.asset;
     var quantity = parseInt(params.qty);
-    // var units = parseInt(params.unit)
+    var units = parseInt(params.unit);
+    var details = params.details;
     // console.log(units)
 
     multichain.issueFrom({
@@ -762,7 +791,10 @@ function issueFrom(params) {
       "to": toAddress,
       "asset": { "name": assetName.name, "open": assetName.open },
       "qty": quantity,
-      "units": 1
+      "units": units,
+      "details": {
+        details
+      }
     },
       (err, res) => {
         if (err == null) {
@@ -771,10 +803,10 @@ function issueFrom(params) {
             message: "your asset has been created"
           });
         } else {
-          console.log(err)
+          console.log(err.message)
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -798,13 +830,13 @@ function issueMore(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "your asset has issued more quantity...!"
           });
         } else {
-          console.log(err)
+          //
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -831,13 +863,13 @@ function issueMoreFrom(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "your asset has issued more quantity...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -864,10 +896,10 @@ function listAssets() {
 
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -884,7 +916,7 @@ function listAssetsbyName(params) {
     },
       (err, res) => {
         if (err == null) {
-          //
+
           async.retry({
             times: 6,
             interval: 5 * 1000
@@ -905,7 +937,7 @@ function listAssetsbyName(params) {
             if (err) {
               return reject({
                 status: 500,
-                message: 'Internal Server Error !'
+                message: err.message
               });
             } else {
               return resolve({
@@ -918,7 +950,7 @@ function listAssetsbyName(params) {
           console.log(JSON.stringify(err))
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -930,8 +962,6 @@ function getAddressBalances(params) {
   return new Promise((resolve, reject) => {
     var response;
     var addresses = params.address;
-
-    console.log("data", addresses)
     multichain.getAddressBalances({
       "address": addresses,
       // "minconf": 1,
@@ -945,13 +975,13 @@ function getAddressBalances(params) {
           return resolve({
 
             response: res,
-            message: "your Assets Balance"
+            message: "your Address Balance"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -973,13 +1003,13 @@ function getAddressTransaction(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "Address transaction returned successfully...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1003,13 +1033,13 @@ function getMultiBalances(params) {
 
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "asset balances...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1032,13 +1062,13 @@ function getAdressMultiBalances(params) {
 
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "your Address Balance...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1062,10 +1092,10 @@ function getTotalBalance() {
             message: "your asset has been created"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1091,13 +1121,13 @@ function getTotalBalances() {
           }
           return resolve({
             response: tokenDetails,
-            message: "your asset has been created"
+            message: "your Address Balance"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1118,13 +1148,13 @@ function getWalletTransaction(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "returned all the transactions pending in wallet...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1137,20 +1167,22 @@ function listAddressTransactions(params) {
     var addresses = params.address;
     multichain.listAddressTransactions({
       "address": addresses,
-      "verbose": false
+      "verbose": false,
+      "count": 999999999,
+      "skip": 0
     },
       (err, res) => {
 
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset Details...!"
+            message: "Address transactions list...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1172,13 +1204,13 @@ function listWalletTransactions(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "returned all the transactions pending in wallet...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1201,13 +1233,13 @@ function send(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "token sent...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1228,13 +1260,13 @@ function sendToAddress(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "token sent...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1258,13 +1290,13 @@ function sendAsset(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "token sent...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1289,13 +1321,13 @@ function sendAssetToAddress(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "token sent...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1309,13 +1341,15 @@ function sendAssetFrom(params) {
     var toAddress = params.to;
     var assetName = params.asset;
     var quantity = params.qty;
+    var details = params.details;
 
     multichain.sendAssetFrom({
       "from": fromAddress,
       "to": toAddress,
       "asset": assetName,
       "qty": quantity,
-      "native-amount": 0
+      "native-amount": 0,
+      "comment": details
     },
       (err, res) => {
 
@@ -1325,10 +1359,9 @@ function sendAssetFrom(params) {
             message: "your asset sent to an address...!"
           });
         } else {
-          console.log(err)
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1351,13 +1384,13 @@ function sendFrom(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "your asset sent to an address...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1380,13 +1413,13 @@ function sendwithData(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "your asset sent to an address...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1409,13 +1442,13 @@ function sendWithMetadata(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "your asset sent to an address...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1438,13 +1471,13 @@ function sendwithDataFrom(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "your asset sent to an address...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1469,13 +1502,13 @@ function sendWithMetadataFrom(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "your asset sent to an address...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1498,13 +1531,13 @@ function sendFromAddress(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "your asset sent to an address...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1530,13 +1563,13 @@ function appendRawExchange(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "offer is locked"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1570,10 +1603,10 @@ function completeRawExchange(params) {
             message: "Transaction Completed"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1597,13 +1630,13 @@ function createRawExchange(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "offer created...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1619,23 +1652,22 @@ function decodeRawExchange(params) {
       "verbose": false
     },
       (err, res) => {
-
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "offer decoded...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
   })
 }
-// decodeRawExchange()
+
 function disableRawTransaction(params) {
   return new Promise((resolve, reject) => {
     var response;
@@ -1648,13 +1680,13 @@ function disableRawTransaction(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "offer is unlocked"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1674,13 +1706,13 @@ function prepareLockUnspent(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "offer is unlocked"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1702,13 +1734,13 @@ function prepareLockUnspentFrom(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "offer is unlocked from your address"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1738,10 +1770,10 @@ function create(params) {
             message: "your asset has been created"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1754,12 +1786,14 @@ function createFrom(params) {
     var fromAddress = params.from;
     var typeStreamAssets = params.type;
     var nameOfAssetStream = params.name;
+    var status = params.open;
+
     var details = params.details;
     multichain.createFrom({
       "from": fromAddress,
       "type": typeStreamAssets,
       "name": nameOfAssetStream,
-      "open": false,
+      "open": status,
       "details": {
         details
       }
@@ -1772,10 +1806,10 @@ function createFrom(params) {
             message: "your asset has been created"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
 
         }
@@ -1799,13 +1833,13 @@ function listStreams() {
         if (err == null) {
           return resolve({
             response: res,
-            message: "your asset has been created"
+            message: "list of streams fetched from blockchain...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       })
@@ -1820,7 +1854,7 @@ function publish(params) {
     var key = params.key;
     var hexstring;
     var value = params.value;
-    console.log(value)
+    // console.log(value)
     let bufStr = Buffer.from(value, 'utf8');
     hexstring = bufStr.toString('hex')
     var streamName = params.stream;
@@ -1836,10 +1870,10 @@ function publish(params) {
           message: "data is stored into Blockchain"
         });
       } else {
-        console.log(err)
+
         return reject({
           status: 500,
-          message: 'Internal Server Error !'
+          message: err.message
         });
       }
     })
@@ -1870,10 +1904,10 @@ function publishRawHex(params) {
           message: "data is stored into Blockchain"
         });
       } else {
-        console.log(err)
+
         return reject({
           status: 500,
-          message: 'Internal Server Error !'
+          message: err.message
         });
       }
     })
@@ -1881,14 +1915,12 @@ function publishRawHex(params) {
 }
 
 function publishFrom(params) {
-  // console.log("val", params.value)
   return new Promise((resolve, reject) => {
     var response;
     var fromAddress = params.from;
     var key = params.key;
     var hexstring;
     var value = params.value;
-    console.log(value)
     let bufStr = Buffer.from(value, 'utf8');
     hexstring = bufStr.toString('hex')
     var streamName = params.stream;
@@ -1907,10 +1939,9 @@ function publishFrom(params) {
           message: "data is stored into Blockchain"
         });
       } else {
-        console.log(err)
         return reject({
           status: 500,
-          message: 'Internal Server Error !'
+          message: err.message
         });
       }
     })
@@ -1935,10 +1966,10 @@ function subscribe(params) {
             message: "Assets/Streams craeted and subscribed"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -1959,13 +1990,13 @@ function unsubscribe(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "Blockchain Information"
+            message: "Assets/Streams  Unsubscribed"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -1990,13 +2021,13 @@ function getAssetTransaction(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "Blockchain Information"
+            message: "Assets transactions returned...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -2012,21 +2043,23 @@ function listAssetTransactions(params) {
 
     multichain.listAssetTransactions({
       "asset": assetName,
-      "verbose": false,
-      "local-ordering": false
+      "verbose": true,
+      "local-ordering": false,
+      "count": 99999999999999,
+      "start": 0
     },
       (err, res) => {
 
         if (err == null) {
           return resolve({
             response: res,
-            message: "Blockchain Information"
+            message: "Assets list of transactions returned...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -2044,20 +2077,20 @@ function getStreamItem(params) {
     multichain.getStreamItem({
       "stream": streamName,
       "txid": transactionId,
-      "verbose": false
+      "verbose": true
     },
       (err, res) => {
 
         if (err == null) {
           return resolve({
             response: res,
-            message: "Blockchain Information"
+            message: "Records available on the streams returned successfully...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -2075,22 +2108,21 @@ function getTxOutData(params) {
     multichain.getTxOutData({
       "txid": transactionId,
       "vout": vout
-    },
-      (err, res) => {
+    }, (err, res) => {
 
-        if (err == null) {
-          return resolve({
-            response: res,
-            message: "Blockchain Information"
-          });
-        } else {
-          console.log(err)
-          return reject({
-            status: 500,
-            message: 'Internal Server Error !'
-          });
-        }
+      if (err == null) {
+        return resolve({
+          response: res,
+          message: "data is returned...!"
+        });
+      } else {
+
+        return reject({
+          status: 500,
+          message: err.message
+        });
       }
+    }
     )
 
   })
@@ -2116,13 +2148,13 @@ function listStreamBlockItems(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "Blockchain Information"
+            message: "list of block items returned successfully...!"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -2142,6 +2174,7 @@ function listStreamKeyItems(params) {
     var startCount = params.start;
     var verbose = params.verbose;
 
+
     multichain.listStreamKeyItems({
       "stream": streamName,
       "key": key,
@@ -2149,6 +2182,7 @@ function listStreamKeyItems(params) {
       "count": lastCount,
       "start": startCount
     }, (err, res) => {
+
       var length = res.length;
 
       if (err == null) {
@@ -2163,29 +2197,75 @@ function listStreamKeyItems(params) {
           // string = Buffer.from(data, 'hex').toString();
           records.push({
             "publishers": res[0].publishers[0],
-            "key": res[0].key,
+            "key": res[0].keys,
             "data": data,
             "confirmations": res[0].confirmations,
             "blocktime": res[0].blocktime,
             "txid": res[0].txid,
+            "vout": res[0].vout
           });
           return resolve({
             response: records
           });
         }
       } else {
-        return reject(err)
+
         return reject({
           status: 500,
-          message: 'Internal Server Error !'
+          message: err.message
         });
       }
     })
 
   })
-
 }
 
+function getRecentItems(params) {
+  return new Promise((resolve, reject) => {
+    var key = params.key;
+    var records = [];
+    var response;
+    var streamName = params.stream;
+    multichain.listStreamKeyItems({
+      "stream": streamName,
+      "key": key,
+      "verbose": true
+    }, (err, res) => {
+
+      var length = res.length;
+
+      if (err == null) {
+        if (length == 0) {
+          return resolve({
+            response: "Data is Not available into Blockchain for Given Key!"
+          });
+        } else {
+          var string = '';
+          var data = res[length - 1].data;
+          string = Buffer.from(data, 'hex').toString();
+          records.push({
+            "publishers": res[0].publishers[0],
+            "key": res[0].keys[0],
+            "data": string,
+            "confirmations": res[0].confirmations,
+            "blocktime": res[0].blocktime,
+            "txid": res[0].txid,
+            "vout": res[0].vout
+          });
+          return resolve({
+            response: records
+          });
+        }
+      } else {
+        return reject({
+          status: 500,
+          message: err.message
+        });
+      }
+    })
+
+  })
+}
 function listStreamKeyItemsStream(params) {
 
   return new Promise((resolve, reject) => {
@@ -2219,20 +2299,20 @@ function listStreamKeyItemsStream(params) {
 
             string = Buffer.from(data, 'hex').toString();
             records.push({
-              "publishers": res[0].publishers[0],
-              "key": res[0].key,
-              "offchain": res[0].offchain,
-              "available": res[0].available,
+              "publishers": res[i].publishers[0],
+              "key": res[i].keys,
+              "offchain": res[i].offchain,
+              "available": res[i].available,
               "data": string,
-              "confirmations": res[0].confirmations,
-              "blockhash": res[0].blockhash,
-              "blockindex": res[0].blockindex,
-              "blocktime": res[0].blocktime,
-              "txid": res[0].txid,
-              "vout": res[0].vout,
-              "valid": res[0].valid,
-              "time": res[0].time,
-              "timereceived": res[0].timereceived
+              "confirmations": res[i].confirmations,
+              "blockhash": res[i].blockhash,
+              "blockindex": res[i].blockindex,
+              "blocktime": res[i].blocktime,
+              "txid": res[i].txid,
+              "vout": res[i].vout,
+              "valid": res[i].valid,
+              "time": res[i].time,
+              "timereceived": res[i].timereceived
             });
           }
           return resolve({
@@ -2240,10 +2320,10 @@ function listStreamKeyItemsStream(params) {
           });
         }
       } else {
-        return reject(err)
+
         return reject({
           status: 500,
-          message: 'Internal Server Error !'
+          message: err.message
         });
       }
     })
@@ -2252,19 +2332,117 @@ function listStreamKeyItemsStream(params) {
 
 }
 
+function listStreamKeyItemData(params) {
+
+  return new Promise((resolve, reject) => {
+    var key = params.key;
+    var records = [];
+    var response;
+    var streamName = params.stream;
+    var lastCount = 999999999;
+    var startCount = -999999999;
+    var verbose = true;
+
+    multichain.listStreamKeyItems({
+      "stream": streamName,
+      "key": key,
+      "verbose": verbose,
+      "count": lastCount,
+      "start": startCount
+    }, (err, res) => {
+      var length = res.length;
+
+      if (err == null) {
+        if (length == 0) {
+          return resolve({
+            response: null
+          });
+        } else {
+
+          var string = '';
+          for (let i = 0; i < res.length; i++) {
+            var data = res[i].data;
+
+            string = Buffer.from(data, 'hex').toString();
+            records.push({
+              "data": string,
+              "blocktime": res[i].blocktime,
+              "txid": res[i].txid,
+              "timereceived": res[i].timereceived
+            });
+          }
+          return resolve({
+            response: records
+          });
+        }
+      } else {
+
+        return reject({
+          status: 500,
+          message: err.message
+        });
+      }
+    })
+
+  })
+
+}
+
+function listStreamLatestRecord(params) {
+
+  return new Promise((resolve) => {
+    var key = params.key;
+    var stream = params.stream_name;
+    var response;
+    multichain.listStreamKeyItems({
+      stream: stream,
+      key: key,
+      verbose: false,
+    }, (err, res) => {
+      var length = res.length;
+
+      if (err == null) {
+        if (length == 0) {
+          return resolve({
+            response: "Data is Not available into Blockchain for Given Key!"
+          });
+        } else {
+
+          var string = '';
+          var data = res[length - 1].data;
+          string = Buffer.from(data, 'hex').toString();
+
+          return resolve({
+            response: string
+          });
+        }
+      } else {
+
+        return reject({
+          status: 500,
+          message: err.message
+        });
+      }
+    })
+
+  })
+
+}
+
+
 function listStreamKeys(params) {
 
   return new Promise((resolve, reject) => {
     var keyStore = [];
     var response;
     var streamName = params.stream;
-    var lastCount = params.count;
-    var startCount = params.start;
+    // var lastCount = params.count;
+    // var startCount = params.start;
     multichain.listStreamKeys({
       "stream": streamName,
       "verbose": false,
-      "count": lastCount,
-      "start": startCount
+      "count": 99999999999999,
+      "start": -9999999999
     }, (err, res) => {
 
       if (err == null) {
@@ -2280,13 +2458,13 @@ function listStreamKeys(params) {
           });
         }
         return resolve({
-          response: keyStore
+          response: keyStore.key
         });
       } else {
-        console.log(err)
+
         return reject({
           status: 500,
-          message: 'Internal Server Error !'
+          message: err.message
         });
       }
     })
@@ -2301,12 +2479,14 @@ function listStreamItems(params) {
     var records = [];
     var hexstring = '';
     var streamName = params.stream;
+    var count = params.count;
+    var start = params.start;
 
     multichain.listStreamItems({
       "stream": streamName,
-      "count": 9999999,
-      "start": 0,
-      "verbose": false,
+      "count": count,
+      "start": start,
+      "verbose": true,
       "local-ordering": false
     }, (err, res) => {
 
@@ -2323,12 +2503,16 @@ function listStreamItems(params) {
             var data = res[i].data;
             string = Buffer.from(data, 'hex').toString();
             records.push({
-              "publishers": res[0].publishers[0],
-              "key": res[0].key,
+              "publishers": res[i].publishers[0],
+              "key": res[i].keys,
               "data": string,
-              "confirmations": res[0].confirmations,
-              "blocktime": res[0].blocktime,
-              "txid": res[0].txid,
+              "confirmations": res[i].confirmations,
+              "blocktime": res[i].blocktime,
+              "txid": res[i].txid,
+              "vout": res[i].vout,
+              "valid": res[i].valid,
+              "time": res[i].time,
+              "timereceived": res[i].timereceived
             });
           }
           return resolve({
@@ -2336,10 +2520,55 @@ function listStreamItems(params) {
           });
         }
       } else {
-        return reject(err)
         return reject({
           status: 500,
-          message: 'Internal Server Error !'
+          message: err.message
+        });
+      }
+    })
+  })
+}
+
+function listInvoice(params) {
+  return new Promise((resolve, reject) => {
+    var response;
+    var records = [];
+    var hexstring = '';
+    var streamName = params.stream;
+
+    multichain.listStreamItems({
+      "stream": streamName,
+      "count": 9999999,
+      "start": 0,
+      "verbose": true,
+      "local-ordering": false
+    }, (err, res) => {
+
+      var length = res.length;
+
+      if (err == null) {
+        if (length == 0) {
+          return resolve({
+            response: "Invoice is Not available into Blockchain for Given Key!"
+          });
+        } else {
+          for (let i = 0; i < res.length; i++) {
+            var string = '';
+            var data = res[i].data;
+            string = Buffer.from(data, 'hex').toString();
+            records.push({
+              "key": res[i].keys,
+              "data": string
+            });
+          }
+          return resolve({
+            response: records
+          });
+        }
+      } else {
+        return reject({
+          status: 500,
+          message: err.message
         });
       }
     })
@@ -2358,7 +2587,7 @@ function listStreamPublisherItems(params) {
     multichain.listStreamPublisherItems({
       "stream": streamName,
       "address": addresses,
-      "verbose": false,
+      "verbose": true,
       "count": lastCount,
       "start": startCount,
       "local-ordering": false
@@ -2368,16 +2597,15 @@ function listStreamPublisherItems(params) {
       if (err == null) {
         if (length == 0) {
           return resolve({
-            response: "Data is Not available into Blockchain for Given Key!"
+            response: []
           });
         } else {
           var string = '';
           var data = res[length - 1].data;
-          console.log(data)
           string = Buffer.from(data, 'hex').toString();
           records.push({
             "publishers": res[0].publishers[0],
-            "key": res[0].key,
+            "key": res[0].keys,
             "offchain": res[0].offchain,
             "available": res[0].available,
             "data": string,
@@ -2391,16 +2619,15 @@ function listStreamPublisherItems(params) {
             "time": res[0].time,
             "timereceived": res[0].timereceived
           });
-          console.log(records)
           return resolve({
             response: records
           });
         }
       } else {
-        console.log(err)
+
         return reject({
           status: 500,
-          message: 'Internal Server Error !'
+          message: err.message
         });
       }
     })
@@ -2409,6 +2636,66 @@ function listStreamPublisherItems(params) {
 
 }
 
+function listStreamPublisherItemsTrade(params) {
+  return new Promise((resolve, reject) => {
+    var key = params.key;
+    var records = [];
+    var response;
+    var addresses = params.address;
+    var streamName = params.stream;
+    var lastCount = 999999999;
+    var startCount = -999999999;
+    multichain.listStreamPublisherItems({
+      "stream": streamName,
+      "address": addresses,
+      "verbose": true,
+      "count": lastCount,
+      "start": startCount,
+      "local-ordering": false
+    }, (err, res) => {
+      var length = res.length;
+
+      if (err == null) {
+        if (length == 0) {
+          return resolve({
+            response: []
+          });
+        } else {
+          for (let i = 0; i < res.length; i++) {
+            var string = '';
+            var data = res[i].data;
+            string = Buffer.from(data, 'hex').toString();
+            records.push({
+              "publishers": res[i].publishers[0],
+              "key": res[i].keys,
+              "offchain": res[i].offchain,
+              "available": res[i].available,
+              "data": string,
+              "confirmations": res[i].confirmations,
+              "blockhash": res[i].blockhash,
+              "blockindex": res[i].blockindex,
+              "blocktime": res[i].blocktime,
+              "txid": res[i].txid,
+              "vout": res[i].vout,
+              "valid": res[i].valid,
+              "time": res[i].time,
+              "timereceived": res[i].timereceived
+            });
+          }
+          return resolve({
+            response: records
+          });
+        }
+      } else {
+
+        return reject({
+          status: 500,
+          message: err.message
+        });
+      }
+    })
+  })
+}
 function listStreamPublishers(params) {
   return new Promise((resolve, reject) => {
     var key = params.key;
@@ -2420,7 +2707,7 @@ function listStreamPublishers(params) {
     multichain.listStreamPublisherItems({
       "stream": streamName,
       "address": "*",
-      "verbose": false,
+      "verbose": true,
       "count": lastCount,
       "start": startCount,
       "local-ordering": false
@@ -2435,26 +2722,30 @@ function listStreamPublishers(params) {
         } else {
           var string = '';
           var data = res[length - 1].data;
-          console.log(data)
+
           string = Buffer.from(data, 'hex').toString();
           records.push({
             "publishers": res[0].publishers[0],
-            "key": res[0].key,
+            "key": res[0].keys[0],
             "data": string,
             "confirmations": res[0].confirmations,
             "blocktime": res[0].blocktime,
             "txid": res[0].txid,
+            "vout": res[0].vout,
+            "valid": res[0].valid,
+            "time": res[0].time,
+            "timereceived": res[0].timereceived
           });
-          console.log(records)
+
           return resolve({
             response: records
           });
         }
       } else {
-        console.log(err)
+
         return reject({
           status: 500,
-          message: 'Internal Server Error !'
+          message: err.message
         });
       }
     })
@@ -2485,13 +2776,13 @@ function combineUnspent(params) {
         if (err == null) {
           return resolve({
             response: res,
-            message: "Blockchain Information"
+            message: "unspent assets combined"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -2511,13 +2802,13 @@ function listLockUnspent() {
         if (err == null) {
           return resolve({
             response: res,
-            message: "Blockchain Information"
+            message: "list of locked offer"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -2531,10 +2822,11 @@ function listUnspent(params) {
     var response;
     var minimumConf = params.minconf;
     var maximumConf = params.maxconf;
+    var receivers = params.address;
     multichain.listUnspent({
       "minconf": minimumConf,
       "maxconf": maximumConf,
-      "receivers": []
+      "receivers": [receivers]
     },
       (err, res) => {
 
@@ -2544,10 +2836,10 @@ function listUnspent(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -2576,10 +2868,10 @@ function lockUnspent(params) {
             message: "Your transaction has been cancelled as per request"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -2614,10 +2906,10 @@ function appendRawChange(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -2646,10 +2938,10 @@ function appendRawData(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -2678,10 +2970,10 @@ function appendRawMetadata(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -2716,10 +3008,10 @@ function appendRawTransaction(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -2752,10 +3044,10 @@ function createRawTransaction(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -2768,14 +3060,14 @@ function createRawSendFrom(params) {
   return new Promise((resolve, reject) => {
     var response;
     var fromAddress = params.from;
-    var amount = params.amounts;
-    var data = params.data;
-    var actions = params.action;
+    var addresses = params.addresses;
+    // var data = params.data;
+    // var actions = params.action;
     multichain.createRawSendFrom({
-      "from": from,
-      "amounts": amount,
-      "data": [data],
-      "action": actions
+      "from": fromAddress,
+      "amounts": addresses,
+      "data": [],
+      "action": "sign"
     },
       (err, res) => {
 
@@ -2785,10 +3077,10 @@ function createRawSendFrom(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -2812,10 +3104,10 @@ function decodeRawTransaction(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -2840,10 +3132,10 @@ function sendRawTransaction(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -2856,11 +3148,11 @@ function signRawTransaction(params) {
   return new Promise((resolve, reject) => {
     var response;
     var hexstring = params.hexstring;
-
+    var private_key = params.private_key;
     multichain.signRawTransaction({
       "hexstring": hexstring,
       "parents": null,
-      "privatekeys": null,
+      "privatekeys": private_key,
       "sighashtype": null
     },
       (err, res) => {
@@ -2871,10 +3163,42 @@ function signRawTransaction(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
+          });
+        }
+      }
+    )
+
+  })
+}
+
+function signRawMultiSignTransaction(params) {
+  return new Promise((resolve, reject) => {
+    var response;
+    var hexstring = params.hexstring;
+    var private_key = params.private_key;
+    var prevtexts = params.prevtexts;
+    multichain.signRawTransaction({
+      "hexstring": hexstring,
+      "parents": prevtexts,
+      "privatekeys": private_key,
+      "sighashtype": null
+    },
+      (err, res) => {
+
+        if (err == null) {
+          return resolve({
+            response: res,
+            message: "Blockchain Information"
+          });
+        } else {
+
+          return reject({
+            status: 500,
+            message: err.message
           });
         }
       }
@@ -2905,10 +3229,10 @@ function addNode(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -2931,10 +3255,10 @@ function getAddedNodeinfo() {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -2955,10 +3279,10 @@ function getNetworkInfo() {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -2981,10 +3305,10 @@ function getPeerInfo() {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3007,10 +3331,10 @@ function ping() {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3031,17 +3355,16 @@ function signMessage(params) {
       "message": messages
     },
       (err, res) => {
-        console.log("signature", res)
         if (err == null) {
           return resolve({
             response: res,
-            message: "Blockchain Information"
+            message: "Signature is generated"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3069,10 +3392,10 @@ function verifyMessage(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3099,10 +3422,10 @@ function getBlock(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3126,10 +3449,10 @@ function getBlockchainInfo() {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3153,10 +3476,10 @@ function getBlockHash(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3178,10 +3501,10 @@ function getMempoolInfo() {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3204,10 +3527,10 @@ function getRawMempool() {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3232,10 +3555,10 @@ function getRawTransaction(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3252,20 +3575,20 @@ function getTxOut(params) {
     multichain.getTxOut({
       "txid": transactionId,
       "vout": vout,
-      "unconfirmed": false
+      "unconfirmed": true
     },
-      (err, res) => {
+      (err, result) => {
 
         if (err == null) {
           return resolve({
-            response: res,
+            response: result,
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3290,10 +3613,10 @@ function listBlocks(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3319,10 +3642,10 @@ function backupWallet(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3346,10 +3669,10 @@ function dumpPrivKey(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3373,10 +3696,10 @@ function dumpWallet(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3400,7 +3723,7 @@ function encryptWallet(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
         }
       }
     )
@@ -3422,10 +3745,10 @@ function getWalletInfo() {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3452,10 +3775,10 @@ function importPrivKey(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3479,10 +3802,10 @@ function importWallet(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3505,10 +3828,10 @@ function walletLock(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3534,10 +3857,10 @@ function walletPassphrase(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3563,10 +3886,10 @@ function walletPassphraseChange(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3597,10 +3920,10 @@ function approveFrom(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3623,10 +3946,10 @@ function listUpgrades() {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3649,10 +3972,10 @@ function clearMempool() {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3676,10 +3999,10 @@ function pause(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3704,10 +4027,10 @@ function resume(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3732,10 +4055,10 @@ function setLastBlock(params) {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3761,10 +4084,10 @@ function getMiningInfo() {
             message: "Blockchain Information"
           });
         } else {
-          console.log(err)
+
           return reject({
             status: 500,
-            message: 'Internal Server Error !'
+            message: err.message
           });
         }
       }
@@ -3800,7 +4123,7 @@ function encryptiv(params) {
     else {
       return reject({
         status: 500,
-        message: 'Internal Server Error !'
+        message: err.message
       });
 
     }
@@ -3836,12 +4159,59 @@ function decryptiv(params) {
     else {
       return reject({
         status: 500,
-        message: 'Internal Server Error !'
+        message: err.message
       });
 
     }
   })
 }
+
+// ===================================== encrypt data ========================================
+function encrypt(params) {
+  return new Promise((resolve, reject) => {
+    var response;
+    var password = params.key;
+    var iv = params.iv;
+    var text = params.text;
+    var cipher = crypto.createCipheriv(algorithm, password, iv)
+    var encrypted = cipher.update(text, 'utf8', 'hex')
+    encrypted += cipher.final('hex');
+    var tag = cipher.getAuthTag();
+
+    return resolve({
+      response: {
+        content: encrypted,
+        tag: tag
+      }
+    })
+  })
+}
+// ===================================== decrypt data ========================================
+function decrypt(params) {
+
+  return new Promise((resolve, reject) => {
+    var response;
+    var password = params.key;
+    var iv = params.iv;
+    var encrypted_tag = params.tag;
+    var encrypted_content = params.content;
+    var decipher = crypto.createDecipheriv(algorithm, password, iv)
+    decipher.setAuthTag(encrypted_tag);
+    var dec = decipher.update(encrypted_content, 'hex', 'utf8')
+    dec += decipher.final('utf8');
+
+    if (dec != null) {
+      return resolve({
+        response: dec,
+      });
+    } else {
+      return resolve({
+        response: null,
+      });
+    }
+  })
+}
+
 
 module.exports = {
   //general
@@ -3871,6 +4241,7 @@ module.exports = {
   listPermissions: listPermissions,
   revoke: revoke,
   revokeFrom: revokeFrom,
+  verifyPermission: verifyPermission,
   //assets
   issue: issue,
   issueFrom: issueFrom,
@@ -3929,6 +4300,7 @@ module.exports = {
   listStreamKeyItems: listStreamKeyItems,
   listStreamKeyItemsStream: listStreamKeyItemsStream,
   listStreamKeys: listStreamKeys,
+  listStreamLatestRecord: listStreamLatestRecord,
   listStreamItems: listStreamItems,
   listStreamPublisherItems: listStreamPublisherItems,
   listStreamPublishers: listStreamPublishers,
@@ -3946,6 +4318,7 @@ module.exports = {
   createRawSendFrom: createRawSendFrom,
   decodeRawTransaction: decodeRawTransaction,
   sendRawTransaction: sendRawTransaction,
+  signRawMultiSignTransaction: signRawMultiSignTransaction,
   signRawTransaction: signRawTransaction,
   //p2p
   addNode: addNode,
@@ -3992,6 +4365,18 @@ module.exports = {
   // encrypt file
   encryptiv: encryptiv,
   // decrypt file
-  decryptiv: decryptiv
+  decryptiv: decryptiv,
+
+  // encrypt
+  encrypt: encrypt,
+
+  // decrypt
+  decrypt: decrypt,
+  getRecentItems: getRecentItems,
+
+  listInvoice: listInvoice,
+  listStreamPublisherItemsTrade: listStreamPublisherItemsTrade,
+
+  listStreamKeyItemData: listStreamKeyItemData
 }
 
