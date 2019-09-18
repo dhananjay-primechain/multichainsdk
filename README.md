@@ -21,13 +21,18 @@ example to use multichainsdk
 var multichainsdk = require('mutichainsdk');
 
 let multichainsdk = await multichainsdk.issueFrom({
+
                    from: from_address
+
                    to: to_address,
+
                    asset: {
                    name:  asset_name,
                    open: true/false
                    },
+
                    quantity: quantity,
+
                    })
         
 Thank You!
