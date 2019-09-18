@@ -38,11 +38,25 @@ multichainsdk.issueFrom({
 
                       return resolve({
 
-                                Status: 200,
+                                status: 200,
 
                                 response:"response from multichainsdk."
 
                       })
+                  
+                   }).catch((err)=>{
+
+                      return reject({
+
+                                status: 401,
+
+                                response : err.message,
+
+                        })
+
+                     })
+
+                   })
 
                 })
         
