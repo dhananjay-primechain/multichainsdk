@@ -23,27 +23,28 @@ var multichainsdk = require('mutichainsdk');
 
 multichainsdk.issueFrom({
 
-from: from_address
+                      from: from_address
 
-to: to_address,
+                      to: to_address,
 
-asset: {
-name:  asset_name,
-open: true/false
- },
+                      asset: {
+                      name:  asset_name,
+                      open: true/false
+                      },
 
- quantity: quantity,
+                      quantity: quantity,
 
-}).then((res)=>{
+                   }).then((res)=>{
 
-return resolve({
+                      return resolve({
 
-Status: 200,
+                                Status: 200,
 
-response:"response from multichainsdk."
+                                response:"response from multichainsdk."
 
-})
+                      })
 
-})
+                })
         
-Thank You!
+ Happy Coding! 
+ Thank You!
