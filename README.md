@@ -20,19 +20,30 @@ example to use multichainsdk
 
 var multichainsdk = require('mutichainsdk');
 
-let multichainsdk = await multichainsdk.issueFrom({
 
-                   from: from_address
+multichainsdk.issueFrom({
 
-                   to: to_address,
+from: from_address
 
-                   asset: {
-                   name:  asset_name,
-                   open: true/false
-                   },
+to: to_address,
 
-                   quantity: quantity,
+asset: {
+name:  asset_name,
+open: true/false
+ },
 
-                   })
+ quantity: quantity,
+
+}).then((res)=>{
+
+return resolve({
+
+Status: 200,
+
+response:"response from multichainsdk."
+
+})
+
+})
         
 Thank You!
