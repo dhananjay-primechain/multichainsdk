@@ -1,6 +1,6 @@
 # multichainsdk
 
-multichainsdk node moudule enable developers to reduce their developement time. 
+multichainsdk node module enable developers to reduce their developement time. 
 This module will help to communicate with multichain.
 
 Multichainsdk is basically advanced version of multichain-node ( node module) it has dependency of multichain-node. 
